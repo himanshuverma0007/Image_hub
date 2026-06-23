@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const { serializeUser, deserializeUser } = require("passport");
 const plm = require("passport-local-mongoose");
 
-mongoose.connect("mongodb://127.0.0.1:27017/pin");
+mongoose.connect(process.env.MONGO_URL || "mongodb://127.0.0.1:27017/pin");
 
 const userSchema = mongoose.Schema({
   username: String,
