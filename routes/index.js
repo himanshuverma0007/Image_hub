@@ -24,7 +24,7 @@ router.get('/profile', isLoggedin, async function(req, res, next) {
     .findOne({username: req.session.passport.user})
     .populate("posts");
 
-  res.render("Profile", {user, nav: true});
+ res.render("profile", {user, nav: true});
 });
 
 // show pages  
@@ -116,11 +116,6 @@ router.post('/login', passport.authenticate("local", {
 
 });
 
-// edit page
-router.get('/edit', isLoggedin, async function(req, res, next) {
-  const user = await userModel.findOne({username: req.session.passport.user});
-  res.render("edit", {user, nav: true});
-});
 
 // logout 
 router.get("/logout", function(req, res, next){
