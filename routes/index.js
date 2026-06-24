@@ -116,6 +116,12 @@ router.post('/login', passport.authenticate("local", {
 
 });
 
+// edit page
+router.get('/edit', isLoggedin, async function(req, res, next) {
+  const user = await userModel.findOne({username: req.session.passport.user});
+  res.render("edit", {user, nav: true});
+});
+
 // logout 
 router.get("/logout", function(req, res, next){
   req.logout(function(err) {
