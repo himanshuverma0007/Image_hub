@@ -1,18 +1,27 @@
 <% include ./partials/header.ejs %>
 
-    <div class="w-full min-h-full bg-zinc-800 px-10 py-8 text-white">
-
-        <div class="cards flex flex-wrap gap-10">
-            <% posts.forEach(function(elem){ %>
-                <div class="card w-32">
-                <div class="w-full h-40 bg-sky-200 rounded-lg overflow-hidden" >
-                    <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.image %>" alt="">
-                </div>
-                <h5 class="mt-2 text-sm"><%= elem.title %></h5>
-                <h6 class="opacity-500 text-xs">@<%= elem.user.username %></h6>
-                </div>
-            <% }) %>
+<div class="w-full min-h-screen bg-zinc-900 px-4 md:px-10 py-8">
+  <h1 class="text-2xl font-bold text-white mb-6">📸 Feed</h1>
+  
+  <div class="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-4 space-y-4">
+    <% posts.forEach(function(elem){ %>
+      <div class="break-inside-avoid bg-zinc-800 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition duration-300">
+        <img class="w-full object-cover" src="/images/uploads/<%= elem.image %>" alt="<%= elem.title %>">
+        <div class="p-3">
+          <h5 class="text-sm font-semibold text-white"><%= elem.title %></h5>
+          <h6 class="text-xs text-zinc-400 mt-1">@<%= elem.user.username %></h6>
         </div>
+      </div>
+    <% }) %>
+  </div>
+
+  <% if(posts.length === 0){ %>
+    <div class="flex flex-col items-center justify-center mt-20 text-zinc-500">
+      <i class="ri-image-line text-6xl mb-4"></i>
+      <p class="text-xl">No posts yet. Be the first to post!</p>
+      <a href="/add" class="mt-4 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">Add Post</a>
     </div>
+  <% } %>
+</div>
 
 <% include ./partials/footer.ejs %>

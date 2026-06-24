@@ -1,44 +1,75 @@
 <% include ./partials/header.ejs %>
 
-    <div class="profile w-full min-h-screen bg-zinc-800 text-white pt-1"  >
-        <form id="uploadform" hidden action="./fileupload" method="post" enctype="multipart/form-data">
-            <input type="file" name="image">
-        </form>
-        <div class="profdets flex flex-col items-center mt-10">
-            <div class="relative">
-                <span id="uploadicon" class="w-8 h-8 absolute bottom-2 right-2 flex items-center justify-center rounded-full bg-zinc-300">
-                    <i class="text-zinc-800 ri-pencil-fill"></i>
-                </span>
+<div class="w-full min-h-screen bg-zinc-900 text-white pb-10">
+  
+  <form id="uploadform" hidden action="/fileupload" method="post" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*">
+  </form>
 
-                <div class="w-full h-40 bg-zinc-200 rounded-full overflow-hidden">
-                    <img class="w-full h-full object-cover" src="/images/uploads/<%= user.profileImage %>" alt="">
-                </div>
-            </div>
-            <h1 class="text-3xl font-semibold mt-5"><%= user.username %></h1>
-            <h3 class="text-md mt-2"><%= user.email %></h3>
-            <a href="./edit" class="mt-4 px-7 text-sm font-semibold py-2 rounded-full bg-zinc-700">Edit</a>
-            <a href="./add" class="px-10 py-3 rounded-lg bg-red-700 text-xs font-semibold mt-5">Add New Post</a>
-        </div>
-        <div class="cards flex flex-wrap gap-10 px-10 mt-10">
-            <div class="card"> 
-                <div class="w-52 h-40 bg-zinc-200 rounded-lg overflow-hidden" >
-                    <img class="w-full h-full object-cover " src="/images/uploads/<%= user?.posts[0]?.image %>" alt="">
-                    <!-- .ke aagey agr ? mark lgaate hai toh it will show you blank if there is no posts  -->
-                </div>
-                <a href="/show/posts" class="inline-block text-xl font-semibold mt-3">Your Uploaded Pins</a>
-                <h5 class="text-zinc-200 opacity-60 text-sm font-regular"><%= user.posts.length %></h5>
-            </div>
-        </div>
+  <!-- Profile Header -->
+  <div class="flex flex-col items-center pt-10 px-4">
+    
+    <!-- Profile Image -->
+    <div class="relative">
+      <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-red-500 shadow-xl">
+        <% if(user.profileImage){ %>
+          <img class="w-full h-full object-cover" src="/images/uploads/<%= user.profileImage %>" alt="Profile">
+        <% } else { %>
+          <div class="w-full h-full bg-zinc-700 flex items-center justify-center">
+            <i class="ri-user-line text-5xl text-zinc-400"></i>
+          </div>
+        <% } %>
+      </div>
+      <span id="uploadicon" class="absolute bottom-2 right-2 w-8 h-8 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center cursor-pointer shadow-lg transition">
+        <i class="ri-pencil-fill text-white text-sm"></i>
+      </span>
     </div>
 
-    <script>
-        document.querySelector("#uploadicon").addEventListener("click", function(){
-            document.querySelector("#uploadform input").click();
-        })
+    <!-- User Info -->
+    <h1 class="text-3xl font-bold mt-4"><%= user.username %></h1>
+    <h3 class="text-zinc-400 mt-1"><%= user.email %></h3>
 
-        document.querySelector("#uploadform input").addEventListener("change", function(){
-            document.querySelector("#uploadform").submit();
-        })
-    </script>
+    <!-- Action Buttons -->
+    <div class="flex gap-4 mt-5">
+      <a href="/edit" class="px-6 py-2 bg-zinc-700 hover:bg-zinc-600 rounded-full text-sm font-semibold transition">Edit Profile</a>
+      <a href="/add" class="px-6 py-2 bg-red-600 hover:bg-red-700 rounded-full text-sm font-semibold transition">+ Add Post</a>
+    </div>
+  </div>
+
+  <!-- Posts Section -->
+  <div class="px-4 md:px-10 mt-10">
+    <h2 class="text-xl font-bold mb-4">Your Posts <span class="text-zinc-400 text-base">(<%= user.posts.length %>)</span></h2>
     
+    <% if(user.posts.length === 0){ %>
+      <div class="flex flex-col items-center justify-center mt-10 text-zinc-500">
+        <i class="ri-image-line text-6xl mb-4"></i>
+        <p class="text-lg">No posts yet!</p>
+        <a href="/add" class="mt-4 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">Add Your First Post</a>
+      </div>
+    <% } else { %>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <% user.posts.forEach(function(post){ %>
+          <div class="bg-zinc-800 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition duration-300">
+            <div class="w-full h-40 overflow-hidden">
+              <img class="w-full h-full object-cover" src="/images/uploads/<%= post.image %>" alt="<%= post.title %>">
+            </div>
+            <div class="p-3">
+              <h5 class="text-sm font-semibold"><%= post.title %></h5>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<script>
+  document.querySelector("#uploadicon").addEventListener("click", function(){
+    document.querySelector("#uploadform input").click();
+  });
+  document.querySelector("#uploadform input").addEventListener("change", function(){
+    document.querySelector("#uploadform").submit();
+  });
+</script>
+
 <% include ./partials/footer.ejs %>
