@@ -38,6 +38,11 @@ router.get('/show/posts', isLoggedin, async function(req, res, next) {
   res.render("show", {user, nav: true});
 });
 
+// edit page
+router.get('/edit', isLoggedin, async function(req, res, next) {
+  const user = await userModel.findOne({username: req.session.passport.user});
+  res.render("edit", {user, nav: true});
+});
 // feed page 
 router.get('/feed', isLoggedin, async function(req, res, next) {
   // res.render('profile');
